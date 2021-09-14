@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Team 
+public enum GameState 
 {
-    ALLY,
-    ENEMY
+    MENU,
+    ONGOING,
+    DEFEAT,
+    VICTORY,
 }

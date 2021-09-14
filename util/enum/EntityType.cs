@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MobType 
+public enum EntityType 
 {
+    BASE,
     WARRIOR
 }
