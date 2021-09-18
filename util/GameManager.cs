@@ -2,8 +2,8 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-using static GameState;
+using util;
+using static util.GameState;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,5 +33,6 @@ public class GameManager : MonoBehaviour
         state = result;
         SceneManager.LoadScene("menu");
     }
+
 
 }

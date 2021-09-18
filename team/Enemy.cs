@@ -1,21 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : Team 
+namespace team
 {
-    public void Init()
+    public class Enemy : Team 
     {
-        base.Init(new Vector2(11f, -4), Color.yellow, Vector2.left);
-    }
+        public void Init()
+        {
+            base.Init(new Vector2(11f, -4), Color.yellow, Vector2.left);
+        }
     
-    public override string ToString()
-    {
-        return "enemy";
-    }
+        public override string ToString()
+        {
+            return "enemy";
+        }
 
-    public override void UpdateBalance(int add)
-    {
-        money += add;
+        public override void UpdateBalance(int add)
+        {
+            money += add;
+        }
+
     }
 }

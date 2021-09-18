@@ -1,37 +1,81 @@
+
+using System;
+using System.Collections;
+using entity.mob;
+using team;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace util
 {
     public class EntityManager : MonoBehaviour
     {
-        [SerializeField] GameObject warrior;
+        [SerializeField]  GameObject prefab;
+
         [SerializeField] GameObject allyBase;
         [SerializeField] GameObject enemyBase;
 
-        private void Start()
+        public static Team ally;
+        public static Team enemy;
+
+        private void Awake()
         {
-                                                  
+            ally = allyBase.GetComponent<Team>();
+            enemy = enemyBase.GetComponent<Team>();
+
             allyBase.GetComponent<Ally>().Init();
             enemyBase.GetComponent<Enemy>().Init();
+
+            if(true)
+            StartCoroutine(StartSpawnEnemy());
         }
 
-        private Mob Spawn(GameObject o, Team team)
+	private IEnumerator StartSpawnEnemy()
+	{
+		while (GameManager.state == GameState.ONGOING)
         {
-            return Instantiate(o, team.spawn, Quaternion.identity).GetComponent<Mob>();
+            int interval = Random.Range(5, 15);
+			yield return new WaitForSeconds(interval);
+            bool spawned = BuyEnemy(MobType.Warrior);
+            Debug.Log("Spawned: " + spawned);
         }
+	}
+  
 
-
-        public void SpawnAlly()
+        public bool BuyAlly(MobType type)
         {
-            Team ally = allyBase.GetComponent<Ally>();
-            Spawn(warrior, ally).Init(ally);
+            return Buy(type, ally);
         }
-        public void SpawnEnemy()
+
+        public bool BuyEnemy(MobType mobType)
         {
-            Team enemy = enemyBase.GetComponent<Enemy>();
-            Spawn(warrior, enemy).Init(enemy);
+            return Buy(mobType, enemy);
         }
 
 
+        private bool Buy(MobType type, Team team)
+        {
+            int cost = Util.GetCost(type);
+            
+            if (team.GetMoney() >= cost)
+            {
+                team.UpdateBalance(-cost);
+                Summon(type, team);
+                return true;
+            }
+
+            return false;
+        }
+
+        private void Summon(MobType mobType, Team team)
+        {
+            GameObject instance = Instantiate(prefab, team.spawn, Quaternion.identity);
+
+            Type type = Util.Type(mobType);
+            
+            Mob mob = instance.AddComponent(type) as Mob;
+            mob.Init(team);
+        }
+        
     }
 }

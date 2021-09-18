@@ -1,29 +1,34 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using entity.mob;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
+using UnityEngine.UIElements;
 
-public class Weapon : MonoBehaviour
+namespace entity
 {
-    private Mob mob;
-
-    private void Start()
+    public class Weapon : MonoBehaviour
     {
-        mob = GetComponentInParent<Mob>();
-    }
+        private Mob mob;
+        public BoxCollider2D box;
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        Entity target = other.GetComponent<Entity>();
-        if(!isFrinedly(target))
-            target.TakeDamage(this.mob.GetDamage());
-    }
+        private void Start()
+        {
+            mob = GetComponentInParent<Mob>();
+            box = GetComponent<BoxCollider2D>();
+            
+            box.offset = new Vector2(mob.attackRange * mob.GetTeam().direction.x, 0);
+        }
 
-    private bool isFrinedly(Entity entity)
-    {
-        return entity.team.Equals(this.mob.team);
-    }
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            Entity target = other.GetComponent<Entity>();
+            
+            if(!isFrinedly(target))
+                target.TakeDamage(this.mob.GetDamage());
+        }
 
+        private bool isFrinedly(Entity entity)
+        {
+            return entity.GetTeam().Equals(this.mob.GetTeam());
+        }
+
+    }
 }

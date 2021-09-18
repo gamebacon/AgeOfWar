@@ -1,16 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
+using team;
 using UnityEngine;
+using util;
 
-public class Warrior : MeleeMob 
+namespace entity.mob
 {
-    public override void Init(Team team)
+    public class Warrior : MeleeMob
     {
-        base.Init(team, EntityType.WARRIOR, 100, 1.2f, 20, 2, .1f);
-    }
-    
-    public override Vector2 GetEye()
-    {
-        return ((Vector2) transform.position) + team.direction * .1f;
+
+        public override void Init(Team team)
+        {
+            base.Init(team, 100, 1.2f, 20, 2, 1f);
+        }
+
+        public override int GetCost()
+        {
+            return 10;
+        }
+        public override MobType GetMobType()
+        {
+            return MobType.Warrior;
+        }
+
+        public override Vector2 GetEye()
+        {
+            return ((Vector2) transform.position) + GetTeam().direction * 1;
+        }
     }
 }
